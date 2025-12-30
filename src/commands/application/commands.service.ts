@@ -1,13 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateJobCommand } from './commands/create-command.command';
+import { CommandRepository } from './ports/command.repository';
+import { CommandFactory } from '../domain/factories/command.factory';
 
 @Injectable()
 export class CommandsService {
-  create(createCommandDto: CreateJobCommand) {
-    return 'This action adds a new command';
+  constructor(
+    private readonly commandRepository: CommandRepository,
+    private readonly commandFactory: CommandFactory,
+  ) {}
+  create(createCommand: CreateJobCommand) {
+    const command = this.commandFactory.create(
+      createCommand.type,
+      createCommand.status,
+      createCommand.agentId,
+    );
+    return this.commandRepository.save(command);
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} command`;
+    return this.commandRepository.findOne(id);
   }
 }

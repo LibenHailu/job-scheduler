@@ -6,6 +6,6 @@ export class Command {
     public id: string,
     public status: CommandStatus,
     public type: CommandType,
-    public agegntId: string,
+    public agentId: string,
   ) {}
 }
