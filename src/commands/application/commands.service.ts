@@ -8,7 +8,7 @@ export class CommandsService {
   constructor(
     private readonly commandRepository: CommandRepository,
     private readonly commandFactory: CommandFactory,
-  ) {}
+  ) { }
   create(createCommand: CreateJobCommand) {
     const command = this.commandFactory.create(
       createCommand.type,
@@ -18,7 +18,7 @@ export class CommandsService {
     return this.commandRepository.save(command);
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.commandRepository.findOne(id);
   }
 }

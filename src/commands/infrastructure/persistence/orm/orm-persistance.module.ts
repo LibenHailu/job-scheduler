@@ -7,6 +7,6 @@ import { Module } from '@nestjs/common';
 @Module({
   imports: [TypeOrmModule.forFeature([CommandEntity])],
   providers: [{ provide: CommandRepository, useClass: OrmCommandRepository }],
-  exports: [OrmCommandRepository],
+  exports: [CommandRepository],
 })
 export class OrmPersistanceModule {}

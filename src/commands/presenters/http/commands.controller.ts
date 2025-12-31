@@ -10,12 +10,16 @@ export class CommandsController {
   @Post()
   create(@Body() createCommandDto: CreateCommandDto) {
     return this.commandsService.create(
-      new CreateJobCommand(createCommandDto.type, createCommandDto.agentId),
+      new CreateJobCommand(
+        createCommandDto.type,
+        createCommandDto.status,
+        createCommandDto.agentId,
+      ),
     );
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.commandsService.findOne(+id);
+    return this.commandsService.findOne(id);
   }
 }
