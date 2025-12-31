@@ -12,9 +12,9 @@ export class CommandsService {
       const response = await axios.post(`${schedulerUrl}/commands`, {
         type: createCommandDto.type,
         status: createCommandDto.status,
-        payload: {
-          ...createCommandDto.payload,
-        },
+        scheduledTime:
+          new Date().getTime() + Number(createCommandDto?.payload?.ms),
+        url: createCommandDto?.payload?.url,
       });
 
       return response.data as unknown;

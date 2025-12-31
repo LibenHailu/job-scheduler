@@ -10,10 +10,12 @@ export class CommandsService {
     private readonly commandFactory: CommandFactory,
   ) {}
   create(createCommand: CreateJobCommand) {
+    console.log(createCommand);
     const command = this.commandFactory.create(
       createCommand.type,
       createCommand.status,
-      // createCommand.agentId,
+      createCommand.scheduledTime,
+      createCommand.url,
     );
     return this.commandRepository.save(command);
   }

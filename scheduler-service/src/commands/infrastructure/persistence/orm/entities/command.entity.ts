@@ -11,6 +11,9 @@ export class CommandEntity {
   @Column()
   type: string;
 
-  // @Column('uuid')
-  // agentId: string;
+  @Column({ nullable: true })
+  scheduledTime?: string;
+
+  @Column({ nullable: true })
+  url?: string;
 }

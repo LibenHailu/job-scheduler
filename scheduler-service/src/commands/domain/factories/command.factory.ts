@@ -6,10 +6,23 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CommandFactory {
-  create(status: string, type: string): Command {
+  create(
+    status: string,
+    type: string,
+    scheduledTime?: string,
+    url?: string,
+  ): Command {
     const commandId = randomUUID();
     const commandType = new CommandType(type as CommandType['value']);
     const commandStatus = new CommandStatus(status as CommandStatus['value']);
-    return new Command(commandId, commandStatus, commandType);
+    const commandScheduledTime = scheduledTime;
+    const commandUrl = url;
+    return new Command(
+      commandId,
+      commandStatus,
+      commandType,
+      commandScheduledTime,
+      commandUrl,
+    );
   }
 }

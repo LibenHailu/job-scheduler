@@ -15,7 +15,8 @@ export class CommandMapper {
       CommandEntity.id,
       commandStatus,
       commandType,
-      // CommandEntity.agentId,
+      CommandEntity.scheduledTime && CommandEntity.scheduledTime,
+      CommandEntity.url && CommandEntity.url,
     );
     return commandModel;
   }
@@ -25,7 +26,8 @@ export class CommandMapper {
     commandEntity.id = command.id;
     commandEntity.status = command.status.value;
     commandEntity.type = command.type.value;
-    // commandEntity.agentId = command.agentId;
+    commandEntity.scheduledTime = command.scheduledTime;
+    commandEntity.url = command.url;
     return commandEntity;
   }
 }
