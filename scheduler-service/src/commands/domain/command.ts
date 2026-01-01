@@ -8,5 +8,7 @@ export class Command {
     public type: CommandType,
     public scheduledTime?: string,
     public url?: string,
+    public shard?: number,
+    public isQueued: boolean = false,
   ) {}
 }

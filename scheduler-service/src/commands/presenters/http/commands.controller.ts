@@ -9,7 +9,6 @@ export class CommandsController {
 
   @Post()
   create(@Body() createCommandDto: CreateCommandDto) {
-    console.log(createCommandDto);
     return this.commandsService.create(
       new CreateJobCommand(
         createCommandDto.type,

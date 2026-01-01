@@ -17,6 +17,8 @@ export class CommandMapper {
       commandType,
       CommandEntity.scheduledTime && CommandEntity.scheduledTime,
       CommandEntity.url && CommandEntity.url,
+      CommandEntity.shard,
+      CommandEntity.isQueued,
     );
     return commandModel;
   }
@@ -28,6 +30,8 @@ export class CommandMapper {
     commandEntity.type = command.type.value;
     commandEntity.scheduledTime = command.scheduledTime;
     commandEntity.url = command.url;
+    commandEntity.shard = command.shard!;
+    commandEntity.isQueued = command.isQueued;
     return commandEntity;
   }
 }

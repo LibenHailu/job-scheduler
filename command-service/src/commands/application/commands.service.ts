@@ -26,7 +26,6 @@ export class CommandsService {
 
   async findOne(id: string) {
     const schedulerUrl = process.env.SCHEDULER_SERVICE_URL!;
-
     try {
       const response = await axios.get(`${schedulerUrl}/commands/${id}`);
 

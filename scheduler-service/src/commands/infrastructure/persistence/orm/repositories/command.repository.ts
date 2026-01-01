@@ -22,4 +22,29 @@ export class OrmCommandRepository {
     const newEntity = await this.ormRepository.save(persistanceModel);
     return CommandMapper.toDomain(newEntity);
   }
+
+  async findDueCommandsByShard(
+    currentTimeMs: number,
+    shard: number,
+  ): Promise<Command[]> {
+    const entities = await this.ormRepository
+      .createQueryBuilder('command')
+      .where('command.scheduledTime >= :currentTime', {
+        currentTime: currentTimeMs,
+      })
+      .andWhere('command.shard = :shard', { shard })
+      .andWhere('command.isQueued = 0')
+      .getMany();
+
+    return entities.map((item) => CommandMapper.toDomain(item));
+  }
+
+  async update(command: Command): Promise<void> {
+    await this.ormRepository.update(
+      { id: command.id },
+      {
+        ...CommandMapper.toPersistence(command),
+      },
+    );
+  }
 }

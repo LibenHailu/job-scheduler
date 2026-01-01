@@ -11,6 +11,12 @@ export class CommandEntity {
   @Column()
   type: string;
 
+  @Column()
+  shard: number;
+
+  @Column({ default: false })
+  isQueued: boolean;
+
   @Column({ nullable: true })
   scheduledTime?: string;
 
