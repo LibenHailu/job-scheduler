@@ -1,0 +1,20 @@
+{
+  "name": "job-scheduler",
+  "version": "1.0.0",
+  "description": "> **Tech Stack:** TypeScript · NestJS · RabbitMQ · SQLite   > **Concepts:** Fault Tolerance · Idempotency · Crash Recovery · Distributed Scheduling   > **Extras:** Docker · Persistence · Failure Simulation",
+  "homepage": "https://github.com/LibenHailu/job-scheduler#readme",
+  "bugs": {
+    "url": "https://github.com/LibenHailu/job-scheduler/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LibenHailu/job-scheduler.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "docker-compose up --build -d"
+  }
+}

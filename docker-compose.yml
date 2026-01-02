@@ -1,0 +1,54 @@
+services:
+  scheduler-master:
+    container_name: scheduler-master
+    restart: always
+    build:
+      context: ./scheduler-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./scheduler:/app
+    env_file:
+      - .env
+    environment:
+      APP_ROLE: master
+    ports:
+      - "3000:3000"
+
+  scheduler-worker:
+    restart: always
+    build:
+      context: ./scheduler-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./scheduler:/app
+    env_file:
+      - .env
+    environment:
+      APP_ROLE: worker
+    depends_on:
+      - scheduler-master
+  command-service:
+    container_name: command-service
+    restart: always
+    build:
+      context: ./command-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./command-service:/app
+    env_file:
+      - .env
+    ports:
+      - "3001:3000"
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
