@@ -9,20 +9,26 @@ export class CommandFactory {
   create(
     status: string,
     type: string,
-    scheduledTime?: string,
+    scheduledTime?: number,
     url?: string,
+    shard: number = Math.floor(Math.random() * 6) + 1,
+    isQueued: boolean = false,
   ): Command {
     const commandId = randomUUID();
     const commandType = new CommandType(type as CommandType['value']);
     const commandStatus = new CommandStatus(status as CommandStatus['value']);
-    const commandScheduledTime = scheduledTime;
+    const commandScheduledTime = scheduledTime ?? new Date().getTime();
     const commandUrl = url;
+    const commandShard = shard;
+    const commandIsQueued = isQueued;
     return new Command(
       commandId,
       commandStatus,
       commandType,
       commandScheduledTime,
       commandUrl,
+      commandShard,
+      commandIsQueued,
     );
   }
 }

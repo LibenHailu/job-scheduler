@@ -9,17 +9,26 @@ export class CommandsService {
     private readonly commandRepository: CommandRepository,
     private readonly commandFactory: CommandFactory,
   ) {}
-  create(createCommand: CreateJobCommand) {
+  async create(createCommand: CreateJobCommand) {
     const command = this.commandFactory.create(
       createCommand.type,
       createCommand.status,
       createCommand.scheduledTime,
       createCommand.url,
+      createCommand.shard,
+      createCommand.isQueued,
     );
-    return this.commandRepository.save(command);
+    const newCommand = await this.commandRepository.save(command);
+    return {
+      commandId: newCommand.id,
+    };
   }
 
-  findOne(id: string) {
-    return this.commandRepository.findOne(id);
+  async findOne(id: string) {
+    const command = await this.commandRepository.findOne(id);
+    return {
+      status: command.shard,
+      agentId: command.shard,
+    };
   }
 }

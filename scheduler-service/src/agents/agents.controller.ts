@@ -4,7 +4,7 @@ import { AgentsService } from './agents.service';
 
 @Controller()
 export class AgentsController {
-  constructor(private readonly agentsService: AgentsService) { }
+  constructor(private readonly agentsService: AgentsService) {}
 
   @MessagePattern({ cmd: 'queueCommands' })
   async queueJobs(params: {

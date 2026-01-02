@@ -1,6 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ClientProxyFactory } from '@nestjs/microservices';
+import {
+  ClientProxyFactory,
+  Transport,
+  RmqOptions,
+} from '@nestjs/microservices';
 import { Cron } from '@nestjs/schedule';
 import { Mutex } from 'async-mutex';
 import { catchError, of } from 'rxjs';
@@ -10,7 +13,7 @@ import { Agent } from '../agents/domain/agent';
 export class ControllerService implements OnModuleInit {
   private readonly mutex: Mutex = new Mutex();
   private readonly agents: Agent[] = [];
-  public static readonly assignableShardLength = 10;
+  public static readonly assignableShardLength = 6;
   private readonly shardStatus: Map<number, boolean> = new Map();
 
   onModuleInit() {
@@ -112,13 +115,11 @@ export class ControllerService implements OnModuleInit {
       const activeAgents = this.agents.filter(
         (agent) => agent.shards.length > 0,
       );
-      console.log(activeAgents);
-
       for (const agent of activeAgents) {
-        const client = ClientProxyFactory.create({
-          // transport: Transport.RMQ,
+        const client = ClientProxyFactory.create(<RmqOptions>{
+          transport: Transport.RMQ,
           options: {
-            urls: [process.env.AMPQ_URL],
+            urls: [process.env.AMQP_URL!],
             queue: `${agent.id}-queue`,
             queueOptions: {
               durable: false,
@@ -127,10 +128,6 @@ export class ControllerService implements OnModuleInit {
         });
         await client.connect();
         for (const shard of agent.shards) {
-          console.log(
-            `dispatching queue command to worker ${agent.id} for shard ${shard}`,
-          );
-
           client
             .send<number>(
               { cmd: 'queueCommands' },
@@ -141,7 +138,6 @@ export class ControllerService implements OnModuleInit {
             )
             .pipe(
               catchError((e) => {
-                console.log('herereee', agent.id);
                 console.log(e);
                 return of(false);
               }),
@@ -158,11 +154,13 @@ export class ControllerService implements OnModuleInit {
     }
   }
 
-  @Cron('*/1 * * * *')
+  @Cron('*/10 * * * *')
   getAllAgentsStatus() {
-    return this.agents.map((agent) => ({
+    this.agents.map((agent) => ({
       id: agent.id,
       shards: agent.shards,
     }));
+
+    console.log('Current Agents Status:', this.agents);
   }
 }

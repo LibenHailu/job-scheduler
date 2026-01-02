@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto';
 import { catchError, Observable, of } from 'rxjs';
 import { CommandRepository } from 'src/commands/application/ports/command.repository';
 import { Command } from 'src/commands/domain/command';
+import { CommandStatus } from 'src/commands/domain/value-objects/command-status';
 
 let connected = false;
 export const agentId = randomUUID();
@@ -62,10 +63,9 @@ export class AgentsService {
 
       await this.amqpConnection.publish(
         'command_execution_exchange',
-        command.type.value,
+        'execute-command-task',
         JSON.stringify(command),
       );
-
       await this.markScheduledCommandAsQueued(command.id);
     }
   }
@@ -80,7 +80,6 @@ export class AgentsService {
           params.shard,
           params.timestamp,
         );
-
       await this.queueCommands(scheduledCommands);
 
       return scheduledCommands.length;
@@ -93,6 +92,7 @@ export class AgentsService {
   async markScheduledCommandAsQueued(commandId: string): Promise<void> {
     const scheduledCommand = await this.commandRepository.findOne(commandId);
     scheduledCommand.isQueued = true;
+    scheduledCommand.status = new CommandStatus('COMPLETED');
     await this.commandRepository.update(scheduledCommand);
   }
 }

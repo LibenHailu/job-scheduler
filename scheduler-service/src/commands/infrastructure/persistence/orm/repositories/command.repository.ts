@@ -24,16 +24,15 @@ export class OrmCommandRepository {
   }
 
   async findDueCommandsByShard(
-    currentTimeMs: number,
     shard: number,
+    currentTimeMs: number,
   ): Promise<Command[]> {
     const entities = await this.ormRepository
       .createQueryBuilder('command')
-      .where('command.scheduledTime >= :currentTime', {
-        currentTime: currentTimeMs,
-      })
+      .where('command.scheduledTime <= :now', { now: currentTimeMs })
       .andWhere('command.shard = :shard', { shard })
       .andWhere('command.isQueued = 0')
+      .orderBy('command.scheduledTime', 'ASC')
       .getMany();
 
     return entities.map((item) => CommandMapper.toDomain(item));

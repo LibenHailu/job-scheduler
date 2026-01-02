@@ -18,7 +18,7 @@ export class CommandEntity {
   isQueued: boolean;
 
   @Column({ nullable: true })
-  scheduledTime?: string;
+  scheduledTime?: number;
 
   @Column({ nullable: true })
   url?: string;

@@ -6,7 +6,7 @@ export class Command {
     public id: string,
     public status: CommandStatus,
     public type: CommandType,
-    public scheduledTime?: string,
+    public scheduledTime?: number,
     public url?: string,
     public shard?: number,
     public isQueued: boolean = false,

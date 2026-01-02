@@ -20,7 +20,7 @@ export class CoreModule {
       //       type: 'direct',
       //     },
       //   ],
-      //   uri: process.env.AMPQ_URL,
+      //   uri: process.env.AMQP_URL,
       //   connectionInitOptions: { wait: false },
       // }),
     ];
