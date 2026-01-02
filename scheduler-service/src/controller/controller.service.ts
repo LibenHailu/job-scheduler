@@ -15,6 +15,8 @@ export class ControllerService implements OnModuleInit {
   private readonly agents: Agent[] = [];
   public static readonly assignableShardLength = 6;
   private readonly shardStatus: Map<number, boolean> = new Map();
+  private readonly randomFailures = process.env.RANDOM_FAILURES === 'true';
+  private readonly killAfter = Number(process.env.KILL_AFTER) * 1000 || null;
 
   onModuleInit() {
     for (let i = 1; i <= ControllerService.assignableShardLength; i++) {
@@ -107,6 +109,32 @@ export class ControllerService implements OnModuleInit {
         this.assignShard(agent.id, shard);
       }
     }
+  }
+
+  private removeRandomAgentSafely() {
+    if (this.agents.length <= 1) {
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * this.agents.length);
+    const agent = this.agents[randomIndex];
+
+    console.log(`💥 Randomly removing agent: ${agent.id}`);
+
+    for (const shard of agent.shards) {
+      this.shardStatus.set(shard, false);
+    }
+
+    this.agents.splice(randomIndex, 1);
+
+    this._assignUnassignedShardsToIdleAgents();
+    this._assignUnassignedShardsToAgentsWithLowestShardCount();
+  }
+
+  @Cron('*/1 * * * *')
+  crashAgent() {
+    if (!this.randomFailures && !this.killAfter) return;
+    this.removeRandomAgentSafely();
   }
 
   @Cron('*/1 * * * *')

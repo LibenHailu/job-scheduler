@@ -1,6 +1,4 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CommandsModule } from './commands/application/commands.module';
 import { CoreModule } from './core/core.module';
 import { ApplicationBootstrapOptions } from './common/interfaces/app-bootstrap-options.interface';
@@ -16,8 +14,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     AgentsModule,
     ScheduleModule.forRoot(),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {
   static register(options: ApplicationBootstrapOptions): DynamicModule {

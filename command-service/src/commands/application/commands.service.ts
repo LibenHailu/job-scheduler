@@ -44,6 +44,11 @@ export class CommandsService {
   executeCommand(rmqmsg) {
     try {
       console.log(rmqmsg);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const msg = JSON.parse(rmqmsg);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const diff = new Date().getTime() - Number(msg?.scheduledTime);
+      return { ok: true, tookMs: diff };
     } catch (err) {
       console.error(err);
     }
