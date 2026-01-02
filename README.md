@@ -69,6 +69,7 @@ WORKER_PORT= 3003 npm run start:dev
 ## 🧠 System Architecture
 
 <!-- <img width="3004" height="1224" alt="Image" src="https://github.com/user-attachments/assets/c826a404-0181-4842-9aec-287115a8b5d5" /> -->
+![Image](https://github.com/user-attachments/assets/c826a404-0181-4842-9aec-287115a8b5d5)
 
 | Component               | Responsibility                                         |
 | ----------------------- | ------------------------------------------------------ |
